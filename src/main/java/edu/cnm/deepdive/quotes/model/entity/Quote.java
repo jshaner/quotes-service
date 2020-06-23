@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.crypto.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.lang.NonNull;
 
@@ -21,19 +22,16 @@ import org.springframework.lang.NonNull;
 @Entity
 public class Quote {
 
-  @NonNull
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "quote_id", nullable = false, updatable = false)
   private Long id;
 
-  @NonNull
-  @UpdateTimestamp
+  @CreationTimestamp
   @Temporal(TemporalType.TIMESTAMP)
   @Column(nullable = false, updatable = false)
   private Date created;
 
-  @NonNull
   @UpdateTimestamp
   @Temporal(TemporalType.TIMESTAMP)
   @Column(nullable = false)
@@ -49,17 +47,14 @@ public class Quote {
   private Source source;
 
 
-  @NonNull
   public Long getId() {
     return id;
   }
 
-  @NonNull
   public Date getCreated() {
     return created;
   }
 
-  @NonNull
   public Date getUpdated() {
     return updated;
   }
