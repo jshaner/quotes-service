@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -63,10 +64,13 @@ public class QuoteController {
 
   @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
   public Quote get(@PathVariable long id)  {
-    return quoteRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
-
-
-
+    return quoteRepository.findById(id).orElseThrow(NoSuchElementException::new);
   }
+
+  @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Iterable<Quote> search(@RequestParam(name = "q", required = true) String filter){
+    return quoteRepository.getAllByTextContainingOrderByTextAsc(filter);
+  }
+
 
 }
