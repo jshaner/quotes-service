@@ -2,6 +2,7 @@ package edu.cnm.deepdive.quotes.controller;
 
 
 import edu.cnm.deepdive.quotes.model.entity.Quote;
+import edu.cnm.deepdive.quotes.model.entity.Source;
 import edu.cnm.deepdive.quotes.model.entity.Tag;
 import edu.cnm.deepdive.quotes.service.QuoteRepository;
 import edu.cnm.deepdive.quotes.service.SourceRepository;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,7 +57,8 @@ public class QuoteController {
       );
     }
     List<Tag> resolvedTags = quote.getTags().stream()
-        .map((tag) -> (tag.getId() == null) ? tag : tagRepository.findById(tag.getId()).orElseThrow(NoSuchElementException::new))
+        .map((tag) -> (tag.getId() == null) ? tag
+            : tagRepository.findById(tag.getId()).orElseThrow(NoSuchElementException::new))
         .collect(Collectors.toList());
     quote.getTags().clear();
     quote.getTags().addAll(resolvedTags);
@@ -66,15 +69,26 @@ public class QuoteController {
 
 
   @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Quote get(@PathVariable long id)  {
+  public Quote get(@PathVariable long id) {
     return quoteRepository.findById(id).orElseThrow(NoSuchElementException::new);
   }
 
   @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Iterable<Quote> search(@RequestParam(name = "q", required = true) String filter){
+  public Iterable<Quote> search(@RequestParam(name = "q", required = true) String filter) {
     return quoteRepository.getAllByTextContainingOrderByTextAsc(filter);
   }
 
+  @PutMapping(value = "/{id:\\d+}/source",
+      consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public Quote putSource(@PathVariable long id, @RequestBody Source source) {
+    Quote quote = get(id);
+    if (source != null && source.getId() != null) {
+      source = sourceRepository.findById(source.getId()).orElseThrow(NoSuchElementException::new);
+    }
+    quote.setSource(source);
+    return quoteRepository.save(quote);
+
+  }
 
 
 }
