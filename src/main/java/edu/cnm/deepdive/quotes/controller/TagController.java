@@ -8,6 +8,7 @@ import edu.cnm.deepdive.quotes.service.QuoteRepository;
 import edu.cnm.deepdive.quotes.service.TagRepository;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/tags")
+@ExposesResourceFor(Tag.class) // TODO Adjust when copying  to the other controllers.
 
 public class TagController {
 
