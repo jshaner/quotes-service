@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.lang.NonNull;
 
-@JsonPropertyOrder(value = {"id", "created", "updated", "name"})
+@JsonPropertyOrder(value = {"id", "created", "updated", "name", "href"})
 public interface FlatSource {
 
   Long getId();
