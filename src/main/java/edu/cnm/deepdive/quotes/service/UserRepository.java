@@ -9,7 +9,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   Optional<User> findFirstByOauthKey(String oauthKey);
 
-  Iterable<User> getAllByRoleOROrderByDisplayNameAsc(Role role);
+  Iterable<User> getAllByRoleOrderByDisplayNameAsc(Role role);
 
 
 }
